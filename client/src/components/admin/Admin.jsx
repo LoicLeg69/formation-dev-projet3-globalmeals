@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useUserContext } from "../../contexts/UserContext";
 
+// Fonction pour créer l'état initial du formulaire pour chaque continent
 const createInitialFormState = () => ({
   id: "",
   country: "",
@@ -34,6 +35,7 @@ const createInitialFormState = () => ({
 });
 
 function Admin() {
+  // États pour gérer le continent sélectionné et le formulaire pour chaque continent
   const [selectedContinent, setSelectedContinent] = useState("");
   const [newsForm, setNewsForm] = useState({
     europe: createInitialFormState(),
@@ -42,22 +44,28 @@ function Admin() {
     asie: createInitialFormState(),
     oceanie: createInitialFormState(),
   });
+
+  // Fonction pour afficher une notification de succès
   const notifySuccess = (text) => toast.success(text);
+  // Fonction pour afficher une notification d'échec
   const notifyFail = (text) => toast.error(text);
 
+  // Référence pour le formulaire
   const formRef = useRef(null);
+  // Navigation pour rediriger l'utilisateur
   const navigate = useNavigate();
 
+  // Récupération de l'utilisateur à partir du contexte
   const { user } = useUserContext();
 
+  // Redirection si l'utilisateur n'est pas admin
   useEffect(() => {
-    if
-      (!(user !== "" && user.role === "admin")) {
+    if (!(user !== "" && user.role === "admin")) {
       navigate("/");
     }
-  }, [user, navigate]); 
-  
-  
+  }, [user, navigate]);
+
+  // Mappage des continents avec les clés utilisées dans l'état
   const continentMap = {
     1: "europe",
     2: "afrique",
@@ -66,10 +74,12 @@ function Admin() {
     5: "oceanie",
   };
 
+  // Gestionnaire de changement pour sélectionner le continent
   const handleContinentChange = (e) => {
     setSelectedContinent(e.target.value);
   };
 
+  // Gestionnaire de changement pour mettre à jour les valeurs du formulaire
   const handleUpdateChange = (e) => {
     const { name, value } = e.target;
     setNewsForm((prevState) => ({
@@ -81,26 +91,28 @@ function Admin() {
     }));
   };
 
+  // Ajuste la hauteur des textarea en fonction du contenu
   const adjustTextareaHeight = (e) => {
     e.target.style.height = "auto";
     e.target.style.height = `${e.target.scrollHeight}px`;
   };
 
+  // Gestionnaire de soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const ApiUrl = import.meta.env.VITE_API_URL;
-  
+
     try {
       const continentData = newsForm[continentMap[selectedContinent]];
       const menuId = selectedContinent;
-  
-      // Menu data update
+
+      // Mise à jour des données du menu
       const menuData = {
         id: menuId,
         country: continentData.country,
       };
-  
+
       const menuResponse = await fetch(`${ApiUrl}/menu`, {
         method: "PATCH",
         headers: {
@@ -108,11 +120,11 @@ function Admin() {
         },
         body: JSON.stringify(menuData),
       });
-  
+
       if (!menuResponse.ok) {
         throw new Error("Erreur lors de la mise à jour du menu.");
       }
-  
+
       const recipeTypes = ["starter", "dish", "dessert", "cocktail"];
       const recipePromises = recipeTypes.map(async (type) => {
         const idField = `${type}Id`;
@@ -121,20 +133,20 @@ function Admin() {
         const stepsField = `${type}Steps`;
         const stepTimeField = `${type}StepTime`;
         const imageUrlField = `${type}ImageUrl`;
-  
+
         const recipeData = {
           id: continentData[idField],
           menu_id: menuId,
           type,
         };
-  
-        // Ajoute que les champs qui ne sont pas vides
+
+        // Ajoute seulement les champs qui ne sont pas vides
         if (continentData[nameField]) recipeData.name = continentData[nameField];
         if (continentData[ingredientsField]) recipeData.ingredient = continentData[ingredientsField];
         if (continentData[stepsField]) recipeData.step = continentData[stepsField];
         if (continentData[stepTimeField]) recipeData.step_time = continentData[stepTimeField];
         if (continentData[imageUrlField]) recipeData.image = continentData[imageUrlField];
-  
+
         return fetch(`${ApiUrl}/recipe`, {
           method: "PATCH",
           headers: {
@@ -143,9 +155,10 @@ function Admin() {
           body: JSON.stringify(recipeData),
         });
       });
-  
+
       await Promise.all(recipePromises);
-  
+
+      // Notifications et réinitialisation du formulaire après soumission réussie
       notifySuccess("Le formulaire a été validé avec succès !");
       if (formRef.current) {
         formRef.current.reset();
@@ -158,14 +171,14 @@ function Admin() {
         asie: createInitialFormState(),
         oceanie: createInitialFormState(),
       });
-  
+
+      // Redirection vers la page du menu du continent sélectionné
       navigate(`/menuPage/${continentMap[selectedContinent]}`);
     } catch (error) {
       console.error("Error submitting form:", error);
       notifyFail("Erreur lors de la soumission du formulaire.");
     }
   };
-  
 
   return (
     <div className="create-menu">
@@ -207,6 +220,7 @@ function Admin() {
           />
         </div>
 
+        {/* Section pour l'entrée */}
         <div>
           <h2>Entrée</h2>
           <div>
@@ -286,15 +300,21 @@ function Admin() {
           </div>
         </div>
 
+        {/* Section pour le plat principal */}
         <div>
-          <h2>Plat</h2>
+          <h2>Plat Principal</h2>
           <div>
+            <input
+              type="hidden"
+              name="dishId"
+              value={newsForm[continentMap[selectedContinent]]?.dishId || ""}
+            />
             <label htmlFor="dishName">
-              Nom du plat:
+              Nom du plat principal:
               <textarea
                 id="dishName"
                 name="dishName"
-                placeholder="Nom du Plat"
+                placeholder="Nom du plat principal"
                 value={
                   newsForm[continentMap[selectedContinent]]?.dishName || ""
                 }
@@ -358,15 +378,21 @@ function Admin() {
           </div>
         </div>
 
+        {/* Section pour le dessert */}
         <div>
           <h2>Dessert</h2>
           <div>
+            <input
+              type="hidden"
+              name="dessertId"
+              value={newsForm[continentMap[selectedContinent]]?.dessertId || ""}
+            />
             <label htmlFor="dessertName">
               Nom du dessert:
               <textarea
                 id="dessertName"
                 name="dessertName"
-                placeholder="Nom du Dessert"
+                placeholder="Nom du dessert"
                 value={
                   newsForm[continentMap[selectedContinent]]?.dessertName || ""
                 }
@@ -408,8 +434,8 @@ function Admin() {
                 name="dessertStepTime"
                 placeholder="Temps des étapes"
                 value={
-                  newsForm[continentMap[selectedContinent]]?.dessertStepTime ||
-                  ""
+                  newsForm[continentMap[selectedContinent]]
+                    ?.dessertStepTime || ""
                 }
                 onChange={handleUpdateChange}
                 onInput={adjustTextareaHeight}
@@ -422,8 +448,8 @@ function Admin() {
                 name="dessertImageUrl"
                 placeholder="Lien de l'image"
                 value={
-                  newsForm[continentMap[selectedContinent]]?.dessertImageUrl ||
-                  ""
+                  newsForm[continentMap[selectedContinent]]
+                    ?.dessertImageUrl || ""
                 }
                 onChange={handleUpdateChange}
                 onInput={adjustTextareaHeight}
@@ -432,15 +458,21 @@ function Admin() {
           </div>
         </div>
 
+        {/* Section pour le cocktail */}
         <div>
           <h2>Cocktail</h2>
           <div>
+            <input
+              type="hidden"
+              name="cocktailId"
+              value={newsForm[continentMap[selectedContinent]]?.cocktailId || ""}
+            />
             <label htmlFor="cocktailName">
               Nom du cocktail:
               <textarea
                 id="cocktailName"
                 name="cocktailName"
-                placeholder="Nom du Cocktail"
+                placeholder="Nom du cocktail"
                 value={
                   newsForm[continentMap[selectedContinent]]?.cocktailName || ""
                 }
@@ -469,7 +501,8 @@ function Admin() {
                 name="cocktailSteps"
                 placeholder="Étapes"
                 value={
-                  newsForm[continentMap[selectedContinent]]?.cocktailSteps || ""
+                  newsForm[continentMap[selectedContinent]]?.cocktailSteps ||
+                  ""
                 }
                 onChange={handleUpdateChange}
                 onInput={adjustTextareaHeight}
@@ -482,8 +515,8 @@ function Admin() {
                 name="cocktailStepTime"
                 placeholder="Temps des étapes"
                 value={
-                  newsForm[continentMap[selectedContinent]]?.cocktailStepTime ||
-                  ""
+                  newsForm[continentMap[selectedContinent]]
+                    ?.cocktailStepTime || ""
                 }
                 onChange={handleUpdateChange}
                 onInput={adjustTextareaHeight}
@@ -496,8 +529,8 @@ function Admin() {
                 name="cocktailImageUrl"
                 placeholder="Lien de l'image"
                 value={
-                  newsForm[continentMap[selectedContinent]]?.cocktailImageUrl ||
-                  ""
+                  newsForm[continentMap[selectedContinent]]
+                    ?.cocktailImageUrl || ""
                 }
                 onChange={handleUpdateChange}
                 onInput={adjustTextareaHeight}

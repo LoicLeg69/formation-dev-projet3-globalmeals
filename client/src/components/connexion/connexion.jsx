@@ -6,30 +6,41 @@ import "./connexion.css";
 
 function Login() {
   const ApiUrl = import.meta.env.VITE_API_URL;
+  
+  // Fonction pour afficher une notification de succès lors de la connexion
   const notifySuccess = (username) => toast.success(`Bienvenue, ${username} !`);
+  // Fonction pour afficher une notification d'échec lors de la connexion
   const notifyFail = () => toast.error("Une erreur s'est produite");
+
+  // Hook pour naviguer entre les pages
   const navigate = useNavigate();
 
+  // Récupère la fonction de connexion à partir du contexte utilisateur
   const { login } = useUserContext();
 
+  // État pour stocker les informations de connexion (email et mot de passe)
   const [loginInfos, setLoginInfos] = useState({
     mail: "",
     password: "",
   });
 
+  // Mise à jour de l'état lorsque l'utilisateur entre ses informations de connexion
   const handleLoginInfos = (e) => {
     setLoginInfos({ ...loginInfos, [e.target.name]: e.target.value });
   };
 
+  // Gestionnaire de soumission du formulaire de connexion
   const handleLogin = async (e) => {
     e.preventDefault();
+    
+    // Validation basique pour s'assurer que l'email et le mot de passe ne sont pas vides
     if (loginInfos.mail.trim() === "" || loginInfos.password.trim() === "") {
       console.error("Mail and password must be non-empty strings");
       return;
     }
 
     try {
-      // Appel à l'API pour demander une connexion
+      // Appel à l'API pour tenter une connexion
       const response = await fetch(`${ApiUrl}/auth/connexion`, {
         method: "post",
         headers: { "Content-Type": "application/json" },
@@ -42,12 +53,18 @@ function Login() {
         console.info("API response:", responseData);
         if (responseData.user) {
           const { username } = responseData.user;
+          
+          // Connecte l'utilisateur en stockant ses données dans le contexte
           login(responseData.user);
+          
+          // Redirection en fonction du rôle de l'utilisateur
           if (loginInfos.pseudo === "admin") {
             navigate("/admin");
           } else {
             navigate("/");
           }
+
+          // Affiche un message de bienvenue
           notifySuccess(username);
         } else {
           console.error("User object is missing in the response");
@@ -89,7 +106,7 @@ function Login() {
         </div>
       </form>
       <Link to="/inscription" className="create">
-        <p>Créez un compte</p>{" "}
+        <p>Créez un compte</p>
       </Link>
     </div>
   );
