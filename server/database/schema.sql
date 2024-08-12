@@ -1,10 +1,10 @@
-create table menu (
+CREATE TABLE menu (
   id int unsigned primary key auto_increment not null,
   continent varchar(100) not null,
   country varchar(100) not null
 );
 
-create table recipe (
+CREATE TABLE recipe (
   id int unsigned primary key auto_increment not null,
   name varchar(100) not null,
   ingredient TEXT not null,

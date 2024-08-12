@@ -107,14 +107,14 @@ export default function NavbarToggle() {
             </li>
           </ul>
         </li>
-        <li className="nav-item"> {/* Élément de la liste pour les favoris ou la création */}
-          {user && user.role === "admin" ? ( // Afficher le lien de création si l'utilisateur est un administrateur
+        <li className="nav-item"> {/* Élément de la liste pour les favoris ou la modification d'un menu */}
+          {user && user.role === "admin" ? ( // Afficher le lien de modification si l'utilisateur est un administrateur
             <Link
               to="/admin"
               className="nav-link active"
               onClick={closeDropdown}
             >
-              Création
+              Modifier
             </Link>
           ) : (
             <Link

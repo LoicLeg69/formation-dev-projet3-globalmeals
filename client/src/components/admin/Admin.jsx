@@ -182,7 +182,7 @@ function Admin() {
 
   return (
     <div className="create-menu">
-      <h1>Création d'un menu</h1>
+      <h1>Modifier votre Menu</h1>
       <form onSubmit={handleSubmit} ref={formRef}>
         <div className="admin-continent">
           <label htmlFor="continent">
