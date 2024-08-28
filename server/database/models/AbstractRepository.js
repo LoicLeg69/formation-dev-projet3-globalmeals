@@ -1,23 +1,23 @@
-// Import database client
+// Importation du client de base de données
 const database = require("../client");
 
-// Provide database access through AbstractRepository class
+// Définition de la classe abstraite AbstractRepository
 class AbstractRepository {
   constructor({ table }) {
-    // thx https://www.codeheroes.fr/2017/11/08/js-classes-abstraites-et-interfaces/
+    // Vérification pour s'assurer que cette classe abstraite ne peut pas être instanciée directement
     if (this.constructor === AbstractRepository) {
       throw new TypeError(
         "Abstract class 'AbstractRepository' cannot be instantiated directly"
       );
     }
 
-    // Store the table name
+    // Stockage du nom de la table dans une propriété
     this.table = table;
 
-    // Provide access to the database client
+    // Fourniture de l'accès au client de base de données
     this.database = database;
   }
 }
 
-// Ready to export
+// Exportation de la classe AbstractRepository pour l'utiliser dans d'autres parties de l'application
 module.exports = AbstractRepository;

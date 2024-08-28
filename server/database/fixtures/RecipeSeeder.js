@@ -1,11 +1,16 @@
+// Importation de la classe abstraite AbstractSeeder
 const AbstractSeeder = require("./AbstractSeeder");
 
+// Définition de la classe RecipeSeeder qui étend AbstractSeeder
 class RecipeSeeder extends AbstractSeeder {
   constructor() {
+    // Appel du constructeur de la classe parente avec les paramètres spécifiques à la table "recipe"
     super({ table: "recipe", truncate: true });
   }
 
+  // Méthode pour exécuter les opérations de peuplement des données
   run() {
+    // Définition des données à insérer dans la table "recipe"
     const recipes = [
       // Europe (Italien)
       {
@@ -16,7 +21,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "15 min",
         type: "starter",
         image: "bruschetta.png",
-        menu_id: this.getRef(`europeItalien`).insertId,
+        menu_id: this.getRef(`europeItalien`).insertId, // Obtention de l'identifiant du menu pour l'Italie
         refName: "europeItalienBruschetta",
       },
       {
@@ -27,7 +32,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "25 min",
         type: "dish",
         image: "pasta.png",
-        menu_id: this.getRef(`europeItalien`).insertId,
+        menu_id: this.getRef(`europeItalien`).insertId, // Obtention de l'identifiant du menu pour l'Italie
         refName: "europeItalienPasta",
       },
       {
@@ -38,7 +43,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "25 min",
         type: "dessert",
         image: "tiramisu.png",
-        menu_id: this.getRef(`europeItalien`).insertId,
+        menu_id: this.getRef(`europeItalien`).insertId, // Obtention de l'identifiant du menu pour l'Italie
         refName: "europeItalienTiramisu",
       },
       {
@@ -49,7 +54,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "10 min",
         type: "cocktail",
         image: "milano-torino.png",
-        menu_id: this.getRef(`europeItalien`).insertId,
+        menu_id: this.getRef(`europeItalien`).insertId, // Obtention de l'identifiant du menu pour l'Italie
         refName: "europeItalienMilanoTorino",
       },
 
@@ -62,7 +67,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "30 min",
         type: "starter",
         image: "pastels.png",
-        menu_id: this.getRef(`afriqueSenegal`).insertId,
+        menu_id: this.getRef(`afriqueSenegal`).insertId, // Obtention de l'identifiant du menu pour le Sénégal
         refName: "afriqueSenegalPastels",
       },
       {
@@ -73,7 +78,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "45 min",
         type: "dish",
         image: "thieboudienne.png",
-        menu_id: this.getRef(`afriqueSenegal`).insertId,
+        menu_id: this.getRef(`afriqueSenegal`).insertId, // Obtention de l'identifiant du menu pour le Sénégal
         refName: "afriqueSenegalThieboudienne",
       },
       {
@@ -83,7 +88,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "15 min",
         type: "dessert",
         image: "mango.png",
-        menu_id: this.getRef(`afriqueSenegal`).insertId,
+        menu_id: this.getRef(`afriqueSenegal`).insertId, // Obtention de l'identifiant du menu pour le Sénégal
         refName: "afriqueSenegalMangoCoco",
       },
 
@@ -94,7 +99,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "20 min",
         type: "cocktail",
         image: "bissap.png",
-        menu_id: this.getRef(`afriqueSenegal`).insertId,
+        menu_id: this.getRef(`afriqueSenegal`).insertId, // Obtention de l'identifiant du menu pour le Sénégal
         refName: "afriqueSenegalBissap",
       },
 
@@ -107,7 +112,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "20 min",
         type: "starter",
         image: "nachos.png",
-        menu_id: this.getRef(`texasAmerique`).insertId,
+        menu_id: this.getRef(`texasAmerique`).insertId, // Obtention de l'identifiant du menu pour le Texas
         refName: "texasAmeriqueNachos",
       },
       {
@@ -118,7 +123,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "2 heures",
         type: "dish",
         image: "ribs.png",
-        menu_id: this.getRef(`texasAmerique`).insertId,
+        menu_id: this.getRef(`texasAmerique`).insertId, // Obtention de l'identifiant du menu pour le Texas
         refName: "texasAmeriqueBarbecueRibs",
       },
       {
@@ -129,7 +134,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "30 min",
         type: "dessert",
         image: "keyLimePie.png",
-        menu_id: this.getRef(`texasAmerique`).insertId,
+        menu_id: this.getRef(`texasAmerique`).insertId, // Obtention de l'identifiant du menu pour le Texas
         refName: "texasAmeriqueKeyLimePie",
       },
       {
@@ -140,7 +145,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "10 min",
         type: "cocktail",
         image: "margarita.png",
-        menu_id: this.getRef(`texasAmerique`).insertId,
+        menu_id: this.getRef(`texasAmerique`).insertId, // Obtention de l'identifiant du menu pour le Texas
         refName: "texasAmeriqueMargarita",
       },
 
@@ -152,7 +157,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "10 min",
         type: "starter",
         image: "edamame.png",
-        menu_id: this.getRef(`asieJapon`).insertId,
+        menu_id: this.getRef(`asieJapon`).insertId, // Obtention de l'identifiant du menu pour le Japon
         refName: "asieJaponEdamame",
       },
       {
@@ -163,7 +168,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "30 min",
         type: "dish",
         image: "sushi.png",
-        menu_id: this.getRef(`asieJapon`).insertId,
+        menu_id: this.getRef(`asieJapon`).insertId, // Obtention de l'identifiant du menu pour le Japon
         refName: "asieJaponSushiAssorti",
       },
       {
@@ -174,7 +179,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "30 min",
         type: "dessert",
         image: "doroyakii.png",
-        menu_id: this.getRef(`asieJapon`).insertId,
+        menu_id: this.getRef(`asieJapon`).insertId, // Obtention de l'identifiant du menu pour le Japon
         refName: "asieJaponDorayaki",
       },
       {
@@ -184,7 +189,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "10 min",
         type: "cocktail",
         image: "sake.png",
-        menu_id: this.getRef(`asieJapon`).insertId,
+        menu_id: this.getRef(`asieJapon`).insertId, // Obtention de l'identifiant du menu pour le Japon
         refName: "asieJaponSakeMartini",
       },
 
@@ -197,7 +202,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "20 min",
         type: "starter",
         image: "thon.png",
-        menu_id: this.getRef(`oceanieTahitien`).insertId,
+        menu_id: this.getRef(`oceanieTahitien`).insertId, // Obtention de l'identifiant du menu pour Tahiti
         refName: "oceanieTahitienPoissonCru",
       },
       {
@@ -207,7 +212,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "40 min",
         type: "dish",
         image: "pouletfafa.png",
-        menu_id: this.getRef(`oceanieTahitien`).insertId,
+        menu_id: this.getRef(`oceanieTahitien`).insertId, // Obtention de l'identifiant du menu pour Tahiti
         refName: "oceanieTahitienPouletFafa",
       },
       {
@@ -218,7 +223,7 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "20 min",
         type: "dessert",
         image: "poissonvanille.png",
-        menu_id: this.getRef(`oceanieTahitien`).insertId,
+        menu_id: this.getRef(`oceanieTahitien`).insertId, // Obtention de l'identifiant du menu pour Tahiti
         refName: "oceanieTahitienPoissonVanille",
       },
       {
@@ -229,15 +234,17 @@ class RecipeSeeder extends AbstractSeeder {
         step_time: "10 min",
         type: "cocktail",
         image: "maiTai.png",
-        menu_id: this.getRef(`oceanieTahitien`).insertId,
+        menu_id: this.getRef(`oceanieTahitien`).insertId, // Obtention de l'identifiant du menu pour Tahiti
         refName: "oceanieTahitienMaiTai",
       },
     ];
 
+    // Itération sur les données et insertion dans la base de données
     recipes.forEach((recipe) => {
-      this.insert(recipe);
+      this.insert(recipe); // Appel de la méthode insert héritée de AbstractSeeder
     });
   }
 }
 
+// Exportation de la classe RecipeSeeder pour l'utiliser dans d'autres parties de l'application
 module.exports = RecipeSeeder;

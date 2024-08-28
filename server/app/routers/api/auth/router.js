@@ -1,12 +1,14 @@
+// Importation du module Express pour créer un routeur
 const express = require("express");
 
+// Création d'une instance de routeur Express
 const router = express.Router();
 
 /* ************************************************************************* */
-// Define Your API Routes Here
+// Définir les routes de l'API ici
 /* ************************************************************************* */
 
-// Import auth-related actions
+// Importation des actions liées à l'authentification
 const { connexion, logout } = require("../../../controllers/authActions");
 const { add, read } = require("../../../controllers/userActions");
 const {
@@ -14,18 +16,19 @@ const {
   verifyToken,
 } = require("../../../services/middlewares/auth");
 
-// Route to add a new item
+// Route pour la connexion de l'utilisateur
 router.post("/connexion", connexion);
 
-// Route to add a new item
+// Route pour l'enregistrement d'un nouvel utilisateur avec hachage du mot de passe
 router.post("/register", hashPassword, add);
 
-// Route to logout the user
+// Route pour la déconnexion de l'utilisateur
 router.get("/logout", logout);
 
-// Route to get user profile
+// Route pour récupérer le profil d'un utilisateur spécifique, protégée par vérification du token
 router.get("/:id", verifyToken, read);
 
 /* ************************************************************************* */
 
+// Exportation du routeur pour l'utiliser dans d'autres parties de l'application
 module.exports = router;

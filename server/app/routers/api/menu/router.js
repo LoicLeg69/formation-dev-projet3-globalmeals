@@ -1,18 +1,29 @@
+// Importation du module Express pour créer un routeur
 const express = require("express");
 
+// Création d'une instance de routeur Express
 const router = express.Router();
 
-// Define a route to fetch menus with their recipes
+/* ************************************************************************* */
+// Définir les routes de l'API ici
+/* ************************************************************************* */
+
+// Importation des actions liées aux menus
 const { browse, add, edit, read } = require(`../../../controllers/menuAction`);
-// Route to get a list of items
+
+// Route pour récupérer la liste des menus
 router.get("/", browse);
+
+// Route pour lire un menu spécifique en fonction des critères (par exemple, un filtre)
 router.get("/read", read);
 
-// router.get("/menus-recipes", getMenusWithRecipes);
-
+// Route pour ajouter un nouveau menu
 router.post("/", add);
 
-// Route to add a new item
+// Route pour modifier un menu existant
 router.patch("/", edit);
 
+/* ************************************************************************* */
+
+// Exportation du routeur pour l'utiliser dans d'autres parties de l'application
 module.exports = router;

@@ -1,57 +1,57 @@
-// Import access to database tables
+// Importation de l'accès aux tables de la base de données
 const tables = require("../../database/tables");
 
-// The B of BREAD - Browse (Read All) operation
+// B de BREAD - Opération Browse (Lire tous les utilisateurs)
 const browse = async (req, res, next) => {
   try {
-    // Fetch all users from the database
+    // Récupérer tous les utilisateurs de la base de données
     const users = await tables.user.readAll();
 
-    // Respond with the users in JSON format
+    // Répondre avec les utilisateurs en format JSON
     res.json(users);
   } catch (err) {
-    // Pass any errors to the error-handling middleware
+    // Passer les erreurs éventuelles au middleware de gestion des erreurs
     next(err);
   }
 };
 
-// The R of BREAD - Read operation
+// R de BREAD - Opération Read (Lire un utilisateur spécifique)
 const read = async (req, res, next) => {
   try {
-    // Fetch a specific user from the database based on the provided ID
+    // Récupérer un utilisateur spécifique de la base de données en fonction de l'ID fourni
     const user = await tables.user.read(req.params.id);
 
-    // If the user is not found, respond with HTTP 404 (Not Found)
-    // Otherwise, respond with the user in JSON format
+    // Si l'utilisateur n'est pas trouvé, renvoyer une réponse avec le statut HTTP 404 (Non trouvé)
+    // Sinon, répondre avec l'utilisateur en format JSON
     if (user === null) {
       res.sendStatus(404);
     } else {
       res.json(user);
     }
   } catch (err) {
-    // Pass any errors to the error-handling middleware
+    // Passer les erreurs éventuelles au middleware de gestion des erreurs
     next(err);
   }
 };
 
-// The A of BREAD - Add (Create) operation
+// A de BREAD - Opération Add (Créer un nouvel utilisateur)
 const add = async (req, res, next) => {
-  // Extract the user data from the request body
+  // Extraire les données de l'utilisateur du corps de la requête
   const user = req.body;
 
   try {
-    // Insert the user into the database
+    // Insérer l'utilisateur dans la base de données
     const insertId = await tables.user.create(user);
 
-    // Respond with HTTP 201 (Created) and the ID of the newly inserted user
+    // Répondre avec le statut HTTP 201 (Créé) et l'ID du nouvel utilisateur inséré
     res.status(201).json({ insertId });
   } catch (err) {
-    // Pass any errors to the error-handling middleware
+    // Passer les erreurs éventuelles au middleware de gestion des erreurs
     next(err);
   }
 };
 
-// Ready to export the controller functions
+// Prêt à exporter les fonctions du contrôleur
 module.exports = {
   browse,
   read,

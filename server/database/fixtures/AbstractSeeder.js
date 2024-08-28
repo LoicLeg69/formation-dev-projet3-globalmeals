@@ -1,72 +1,75 @@
 /* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
 
-// Import Faker library for generating fake data
+// Importation de la bibliothèque Faker pour générer des données fictives
 const { faker } = require("@faker-js/faker");
 
-// Import database client
+// Importation du client de base de données
 const database = require("../client");
 
-// Declare an object to store created objects from their names
+// Déclaration d'un objet pour stocker les objets créés en fonction de leurs noms
 const refs = {};
 
-// Provide faker access through AbstractSeed class
+// Classe abstraite pour les seeder
 class AbstractSeeder {
   constructor({ table, truncate = true, dependencies = [] }) {
-    // thx https://www.codeheroes.fr/2017/11/08/js-classes-abstraites-et-interfaces/
+    // Vérifier que la classe abstraite ne peut pas être instanciée directement
+    // Référence : https://www.codeheroes.fr/2017/11/08/js-classes-abstraites-et-interfaces/
     if (this.constructor === AbstractSeeder) {
       throw new TypeError(
-        "Abstract class 'AbstractSeed' cannot be instantiated directly"
+        "La classe abstraite 'AbstractSeed' ne peut pas être instanciée directement"
       );
     }
 
+    // Initialiser les propriétés de la classe
     this.table = table;
-
-    this.truncate = truncate;
-
-    this.dependencies = dependencies;
-
-    this.promises = [];
-
-    this.faker = faker;
-    this.refs = refs;
+    this.truncate = truncate; // Indique si la table doit être vidée avant l'insertion
+    this.dependencies = dependencies; // Liste des dépendances pour l'ordre d'exécution
+    this.promises = []; // Stocke les promesses d'insertion
+    this.faker = faker; // Fournit un accès à Faker pour générer des données
+    this.refs = refs; // Références aux objets créés
   }
 
+  // Méthode privée pour insérer des données dans la base de données
   async #doInsert(data) {
-    // Extract ref name (if it exists)
+    // Extraire le nom de référence (s'il existe) et les valeurs
     const { refName, ...values } = data;
 
-    // Prepare the SQL statement: "insert into <table>(<fields>) values (<placeholders>)"
-    const fields = Object.keys(values).join(",");
-    const placeholders = new Array(Object.keys(values).length)
+    // Préparer la requête SQL : "insert into <table>(<fields>) values (<placeholders>)"
+    const fields = Object.keys(values).join(","); // Champs de la table
+    const placeholders = new Array(Object.keys(values).length) // Placeholders pour les valeurs
       .fill("?")
       .join(",");
 
     const sql = `insert into ${this.table}(${fields}) values (${placeholders})`;
 
-    // Perform the query and if applicable store the insert id given the ref name
+    // Exécuter la requête SQL et, si applicable, stocker l'ID d'insertion selon le nom de référence
     const [result] = await database.query(sql, Object.values(values));
 
     if (refName != null) {
       const { insertId } = result;
 
+      // Stocker les données avec l'ID d'insertion dans les références
       refs[refName] = { ...values, insertId };
     }
   }
 
+  // Ajouter une insertion à la liste des promesses
   insert(data) {
     this.promises.push(this.#doInsert(data));
   }
 
+  // Méthode abstraite que les sous-classes doivent implémenter
   // eslint-disable-next-line class-methods-use-this
   run() {
-    throw new Error("You must implement this function");
+    throw new Error("Vous devez implémenter cette fonction");
   }
 
+  // Obtenir une référence à un objet créé basé sur le nom
   // eslint-disable-next-line class-methods-use-this
   getRef(name) {
     return refs[name];
   }
 }
 
-// Ready to export
+// Prêt à être exporté
 module.exports = AbstractSeeder;

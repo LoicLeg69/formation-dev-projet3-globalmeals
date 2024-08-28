@@ -35,14 +35,13 @@ class MenuRepository extends AbstractRepository {
     return rows;
   }
 
+  // Lire les enregistrements par continent
   async readByContinent(continent) {
-    // Execute the SQL SELECT query to retrieve all rows from the "rows" table
     const [rows] = await this.database.query(
       `SELECT * FROM ${this.table} WHERE continent = ?`,
       [continent]
     );
 
-    // Return the array of rows
     return rows;
   }
 }

@@ -1,31 +1,31 @@
-// Import the repository modules responsible for handling data operations on the tables
+// Importation des modules de répertoire responsables des opérations sur les tables
 const MenuRepository = require("./models/MenuRepository");
 const RecipeRepository = require("./models/RecipeRepository");
 const UserRepository = require("./models/UserRepository");
 
-// Create an empty object to hold data repositories for different tables
+// Création d'un objet vide pour contenir les répertoires de données pour différentes tables
 const tables = {};
 
 /* ************************************************************************* */
-// Register data repositories for tables
+// Enregistrement des répertoires de données pour les tables
 /* ************************************************************************* */
 
-// Register each repository as data access point for its table
+// Enregistrement de chaque répertoire comme point d'accès aux données pour sa table
 tables.menu = new MenuRepository();
 tables.recipe = new RecipeRepository();
 tables.user = new UserRepository();
 
 /* ************************************************************************* */
 
-// Use a Proxy to customize error messages when trying to access a non-existing table
+// Utilisation d'un Proxy pour personnaliser les messages d'erreur lors de l'accès à une table inexistante
 
-// Export the Proxy instance with custom error handling
+// Exportation de l'instance Proxy avec une gestion des erreurs personnalisée
 module.exports = new Proxy(tables, {
   get(obj, prop) {
-    // Check if the property (table) exists in the tables object
+    // Vérifier si la propriété (table) existe dans l'objet tables
     if (prop in obj) return obj[prop];
 
-    // If the property (table) does not exist, throw a ReferenceError with a custom error message
+    // Si la propriété (table) n'existe pas, lancer une ReferenceError avec un message d'erreur personnalisé
     throw new ReferenceError(
       `tables.${prop} is not defined. Did you register it in ${__filename}?`
     );
